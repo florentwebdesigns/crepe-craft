@@ -1,0 +1,68 @@
+// The menu, from the cafe's in-store boards (names, prices, ingredients). Board typos fixed:
+// "Spincah" -> Spinach, "Loutus" -> Lotus, "Carmel" -> Caramel, "Powder Sugar" -> Powdered sugar.
+// Each item has a recipe for its 3D model. Toppings shown are only the listed ingredients.
+export const CATS = [
+  { id: 'sweet', name: 'Sweet crepes', mood: ['#c2652a', '#ffc58e'], note: 'Build your own, up to 4 toppings: $14.99' },
+  { id: 'savory', name: 'Savory crepes', mood: ['#b98a22', '#ffe2a2'], note: 'Build your own, up to 4 toppings: $16.99' },
+  { id: 'waffles', name: 'Waffles', mood: ['#cf8418', '#ffd38a'], note: 'Savory waffles $13.49: chicken, spinach & feta, avocado & egg, buffalo chicken, caprese' },
+  { id: 'drinks', name: 'Drinks', mood: ['#8a2748', '#ffc9d6'], note: 'Shakes, smoothies, coffee and tea. Sizes S / M / L' },
+];
+
+export const ITEMS = [
+  // sweet crepes
+  { id: 'crepe-craft', cat: 'sweet', name: 'Crepe Craft', price: '$9.25', ing: 'Nutella, powdered sugar',
+    r: { type: 'crepe', seed: 7, drizzle: ['nutella'], sugar: .55 } },
+  { id: 'banana-bites', cat: 'sweet', name: 'Banana Bites', price: '$11.49', ing: 'Banana, Nutella',
+    r: { type: 'crepe', seed: 8, drizzle: ['nutella'], sugar: 0, peek: [{ t: 'banana', n: 4 }], top: [{ t: 'banana', n: 5 }] } },
+  { id: 'strawberryfic', cat: 'sweet', name: 'Strawberryfic', price: '$11.49', ing: 'Strawberry, Nutella',
+    r: { type: 'crepe', seed: 9, drizzle: ['nutella'], sugar: 0, peek: [{ t: 'strawberrySlice', n: 5 }], top: [{ t: 'strawberrySlice', n: 6 }, { t: 'strawberryHalf', n: 2 }] } },
+  { id: 'berry-bliss', cat: 'sweet', name: 'Berry Bliss', price: '$14.25', ing: 'Berries, New York style cheesecake',
+    r: { type: 'crepe', seed: 10, sugar: 0, peek: [{ t: 'cheesecake', n: 4 }], top: [{ t: 'blueberry', n: 7 }, { t: 'raspberry', n: 4 }, { t: 'strawberrySlice', n: 2 }] } },
+  { id: 'banana-berry', cat: 'sweet', name: 'Banana Berry', price: '$12.49', ing: 'Banana, strawberry, Nutella',
+    r: { type: 'crepe', seed: 11, drizzle: ['nutella'], sugar: 0, peek: [{ t: 'banana', n: 2 }, { t: 'strawberrySlice', n: 3 }], top: [{ t: 'banana', n: 3 }, { t: 'strawberrySlice', n: 3 }] } },
+  { id: 'smorelicious', cat: 'sweet', name: 'S’morelicious', price: '$12.49', ing: 'Marshmallows, graham crackers, chocolate chips, caramel, Nutella',
+    r: { type: 'crepe', seed: 12, drizzle: ['nutella', 'caramel'], sugar: 0, peek: [{ t: 'marshmallow', n: 4 }], top: [{ t: 'marshmallow', n: 6 }, { t: 'graham', n: 4 }, { t: 'chip', n: 10 }] } },
+  { id: 'lotus-fusion', cat: 'sweet', name: 'Lotus Fusion', price: '$12.49', ing: 'Banana, Biscoff cookie crumbs, Biscoff butter',
+    r: { type: 'crepe', seed: 13, drizzle: ['cookiebutter'], sugar: 0, peek: [{ t: 'banana', n: 3 }], top: [{ t: 'banana', n: 3 }, { t: 'crumb', kind: 'biscoff', n: 18 }] } },
+  // savory crepes
+  { id: 'mushroom-spinach', cat: 'savory', name: 'Mushroom and Spinach', price: '$14.25', ing: 'Sautéed mushrooms, garlic, onions, wilted spinach and a sprinkle of Parmesan',
+    r: { type: 'crepe', seed: 21, batterSeed: 5, sugar: 0, peek: [{ t: 'leaf', kind: 'spinach', n: 4 }, { t: 'mushroom', n: 3 }], top: [{ t: 'parm', n: 40 }, { t: 'mushroom', n: 2 }] } },
+  { id: 'chicken-pesto', cat: 'savory', name: 'Chicken and Pesto', price: '$14.25', ing: 'Grilled chicken strips tossed in basil pesto, with a drizzle of balsamic glaze',
+    r: { type: 'crepe', seed: 22, batterSeed: 5, sugar: 0, drizzle: ['balsamic'], peek: [{ t: 'chicken', n: 4, kind: 'pesto' }], top: [{ t: 'chicken', n: 4, kind: 'pesto' }] } },
+  { id: 'spinach-feta', cat: 'savory', name: 'Spinach and Feta', price: '$14.25', ing: 'Sautéed spinach with crumbled feta cheese',
+    r: { type: 'crepe', seed: 23, batterSeed: 5, sugar: 0, peek: [{ t: 'leaf', kind: 'spinach', n: 5 }, { t: 'feta', n: 4 }], top: [{ t: 'feta', n: 9 }] } },
+  { id: 'caprese', cat: 'savory', name: 'Caprese', price: '$12.99', ing: 'Sliced fresh tomatoes, basil leaves, mozzarella, balsamic vinegar',
+    r: { type: 'crepe', seed: 24, batterSeed: 5, sugar: 0, drizzle: ['balsamic'], peek: [{ t: 'tomato', n: 3 }, { t: 'mozzarella', n: 2 }], top: [{ t: 'leaf', kind: 'basil', n: 3 }] } },
+  { id: 'egg-cheese', cat: 'savory', name: 'Egg and Cheese', price: '$12.99', ing: 'Scrambled egg and cheese',
+    r: { type: 'crepe', seed: 25, batterSeed: 5, sugar: 0, peek: [{ t: 'egg', n: 6 }, { t: 'cheese', n: 3 }], top: [{ t: 'egg', n: 5 }] } },
+  // waffles
+  { id: 'classic-waffle', cat: 'waffles', name: 'Classic Waffle', price: '$9.49', ing: 'Maple syrup',
+    r: { type: 'waffle', seed: 31, wedges: 1, drizzle: ['maple'], sugar: 0 } },
+  { id: 'banana-waffle', cat: 'waffles', name: 'Banana Waffle', price: '$10.95', ing: 'Banana, Nutella',
+    r: { type: 'waffle', seed: 32, drizzle: ['nutella'], sugar: 0, top: [{ t: 'banana', n: 8 }] } },
+  { id: 'chocolate-chip-waffle', cat: 'waffles', name: 'Chocolate Chip Waffle', price: '$10.95', ing: 'Nutella, whipped cream',
+    r: { type: 'waffle', seed: 33, drizzle: ['nutella'], sugar: 0, top: [{ t: 'chip', n: 16 }, { t: 'cream', n: 3, spread: .55 }] } },
+  { id: 'berry-waffle', cat: 'waffles', name: 'Berry Waffle', price: '$10.95', ing: 'Blueberry, raspberry',
+    r: { type: 'waffle', seed: 34, sugar: 0, top: [{ t: 'blueberry', n: 14 }, { t: 'raspberry', n: 8 }] } },
+  { id: 'oreo-waffle', cat: 'waffles', name: 'Oreo Waffle', price: '$10.95', ing: 'Crushed Oreo, banana, Nutella',
+    r: { type: 'waffle', seed: 35, drizzle: ['nutella'], sugar: 0, top: [{ t: 'banana', n: 5 }, { t: 'crumb', kind: 'oreo', n: 26 }] } },
+  { id: 'strawberry-waffle', cat: 'waffles', name: 'Strawberry Waffle', price: '$10.95', ing: 'Strawberry, Nutella',
+    r: { type: 'waffle', seed: 36, drizzle: ['nutella'], sugar: 0, top: [{ t: 'strawberrySlice', n: 7 }, { t: 'strawberryHalf', n: 3 }] } },
+  { id: 'smores-waffle', cat: 'waffles', name: 'S’mores Waffle', price: '$11.95', ing: 'Marshmallows, graham cracker, caramel, Nutella',
+    r: { type: 'waffle', seed: 37, drizzle: ['nutella', 'caramel'], sugar: 0, top: [{ t: 'marshmallow', n: 10 }, { t: 'graham', n: 5 }] } },
+  { id: 'lotus-waffle', cat: 'waffles', name: 'Lotus Waffle', price: '$10.95', ing: 'Biscoff, cookie butter, banana',
+    r: { type: 'waffle', seed: 38, drizzle: ['cookiebutter'], sugar: 0, top: [{ t: 'banana', n: 5 }, { t: 'crumb', kind: 'biscoff', n: 22 }] } },
+  // drinks
+  { id: 'mango-madness', cat: 'drinks', name: 'Mango Madness', price: 'S $7.99 · M $8.49 · L $9.50', ing: 'Smoothie',
+    r: { type: 'drink', seed: 41, liquid: [[0, '#F0A92E'], [1, '#F7C64A']], marble: .12, heap: '#F5B83A', garnish: ['pineapple', 'strawberry', 'umbrella'], umbrella: '#6cc7e8' } },
+  { id: 'strawberry-banana', cat: 'drinks', name: 'Strawberry Banana', price: 'S $6.99 · M $7.49 · L $8.25', ing: 'Smoothie',
+    r: { type: 'drink', seed: 42, liquid: [[0, '#C93A4E'], [1, '#E2677A']], marble: .16, heap: '#D44258', garnish: ['strawberry', 'umbrella'], umbrella: '#5fc9a4' } },
+  { id: 'mixed-berry', cat: 'drinks', name: 'Mixed Berry', price: 'S $6.99 · M $7.49 · L $8.25', ing: 'Smoothie',
+    r: { type: 'drink', seed: 43, liquid: [[0, '#6E1A3E'], [1, '#A2345E']], marble: .14, heap: '#8E2850', straw: '#f0e2d0' } },
+  { id: 'oreo-milkshake', cat: 'drinks', name: 'Oreo Milkshake', price: 'S $6.99 · M $7.49 · L $8.25', ing: 'Milkshake',
+    r: { type: 'drink', seed: 44, liquid: [[0, '#B9AA9C'], [1, '#D8CDC2']], marble: .1, drip: '#2a1c16', cream: true, dome: true, straw: '#2b2522' } },
+  { id: 'nutella-milkshake', cat: 'drinks', name: 'Nutella Milkshake', price: 'S $6.99 · M $7.49 · L $8.25', ing: 'Milkshake',
+    r: { type: 'drink', seed: 45, liquid: [[0, '#8C5A38'], [1, '#B07D57']], marble: .12, drip: '#3b1a0b', cream: true, creamDrizzle: 'nutella', dome: true, straw: '#e9dccb' } },
+  { id: 'iced-caramel-macchiato', cat: 'drinks', name: 'Iced Caramel Macchiato', price: 'S $3.95 · M $4.49 · L $5.49', ing: 'Iced coffee',
+    r: { type: 'drink', seed: 46, liquid: [[0, '#EFE4D2'], [.55, '#E2CBA8'], [.72, '#8A552E'], [1, '#6E3F20']], marble: .08, drip: '#b5621c', ice: 5, sticker: false, straw: '#f3efe6', fill: .9 } },
+];

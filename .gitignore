@@ -1,0 +1,5 @@
+node_modules/
+src-3d/fontcache/
+src-3d/stills_raw/
+src-3d/shots/
+.DS_Store

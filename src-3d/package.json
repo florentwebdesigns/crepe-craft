@@ -1,0 +1,7 @@
+{
+  "name": "crepe-craft-3d",
+  "private": true,
+  "description": "Source for assets/scene.js (three.js scene) and index.html. Run: npm i && node build.mjs",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "esbuild": "0.24.0", "three": "0.187.0" }
+}

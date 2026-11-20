@@ -1,142 +1,121 @@
-# DESIGN.md · Crepe Craft Cafe (demo preview)
+# DESIGN.md · Crepe Craft Cafe (demo preview, v5)
 
-Concept: **"Crafted, layer by layer."** A dark, warm, editorial site where one
-live 3D crepe is the star and each chapter (00–07) peels back one layer of the
-craft. Premium but friendly: a neighborhood dessert spot, not a luxury hotel.
+Concept: **a cinematic 3D product experience.** Each menu item is a live
+three.js object on a dark, moody studio stage: one big object, a short name in
+large type, a small caption. Scroll drives everything and every move reverses.
+Premium but friendly: a neighborhood crepe and waffle spot, not a luxury hotel.
 
-Direction note: the UXKIN reference library could not connect in this session,
-so this direction is built from the brief (morphowater-style feel: staged intro
-counter, chapter numbering, scroll progress, bold sans with italic accents,
-tracked labels) and the rules below, not from compared reference sites.
+Direction note: florent's brief names ciaoenergy.com as the reference for the
+feel. The UXKIN reference library could not connect, so nothing here is copied
+from compared sites; Crepe Craft's own palette and type carry over from v3/v4.
 
 ## 1. Color (dark only, tokens in `:root`)
 
 | Token | Value | Role |
 |---|---|---|
-| `--cocoa-950` | `#140B07` | Page background (deep espresso, never navy) |
-| `--cocoa-900` | `#1E120C` | Section surface, cards |
-| `--cocoa-800` | `#2B1A11` | Raised surface, hover, inputs |
-| `--cocoa-700` | `#45301F` | Borders, dividers, progress track |
-| `--cream-50`  | `#F7ECDD` | Primary text, headlines (≈16:1 on bg) |
-| `--cream-300` | `#CDBBA6` | Secondary text, body copy (≈10:1) |
-| `--cream-500` | `#A08C77` | Tertiary, captions, labels (≈6:1) |
-| `--batter`    | `#EBB054` | **Primary accent**: buttons, links, italic accent words, progress bar |
-| `--batter-deep` | `#C98A2E` | Button hover/pressed, gradients on the 3D crepe |
-| `--berry`     | `#E8414F` | **Sparing pop**: strawberry particles, one "live" dot, rating star. Max 1 use per view. Never body text |
-| `--on-batter` | `#1A0F08` | Text on gold buttons (≈10:1) |
+| `--stage` | `#0B0604` | Page base and the 3D stage clear colour (they must match) |
+| `--cocoa-950` | `#140B07` | Section background below the stages |
+| `--cocoa-900` | `#1E120C` | Panels, cards, form surface |
+| `--cocoa-800` | `#2B1A11` | Inputs, hover |
+| `--cocoa-700` | `#45301F` | Borders, dividers |
+| `--cream-50`  | `#F7ECDD` | Headlines, item names |
+| `--cream-300` | `#CDBBA6` | Body copy, ingredients |
+| `--cream-500` | `#A08C77` | Captions, notes, labels |
+| `--batter`    | `#EBB054` | **Primary accent**: Order buttons, prices, tab progress |
+| `--batter-deep` | `#C98A2E` | Button hover |
+| `--on-batter` | `#1A0F08` | Text on gold buttons |
+| `--error` | `#FF9A9F` | Form errors |
+| `--mood` | per category | Category label and rim light, set by the 3D layer |
 
-Contrast floor: body ≥ 4.5:1, large text ≥ 3:1. Placeholder panels use a
-dashed `--cocoa-700` border on `--cocoa-900` with `--cream-500` labels.
+Category moods (backdrop glow, rim light): Sweet `#c2652a`/`#ffc58e`,
+Savory `#b98a22`/`#ffe2a2`, Waffles `#cf8418`/`#ffd38a`, Drinks `#8a2748`/`#ffc9d6`.
+Contrast floor: body ≥ 4.5:1, large text ≥ 3:1. Text that sits over the 3D
+stage gets a soft shade behind it (bottom-left radial on desktop, a bottom
+gradient on phones).
 
 ## 2. Typography (Google Fonts)
 
-- **Display:** Schibsted Grotesk 700/800 + 700 italic. Headlines are big, tight
-  (`line-height: .92`, `letter-spacing: -0.035em`), with one or two **key words
-  in italic, colored `--batter`**.
-- **Body/UI:** Instrument Sans 400/500/600.
-- **Labels:** Instrument Sans 600, uppercase, `letter-spacing: .18em`, 12–13px,
-  `--cream-500`. Chapter numbers set in labels as `01 — The craft`.
+- **Display:** Schibsted Grotesk 800 (+ italic for the wordmark). Tight:
+  `line-height .92`, `letter-spacing -.045em` on item names.
+- **Body/UI:** Instrument Sans 400/500/600. Labels 600, uppercase, tracked.
 
-| Step | Size (clamp) | LH | Use |
-|---|---|---|---|
-| `--fs-mega` | `clamp(3.2rem, 11vw, 10.5rem)` | .9 | Hero headline |
-| `--fs-xl` | `clamp(2.4rem, 6.5vw, 6rem)` | .95 | Chapter titles |
-| `--fs-lg` | `clamp(1.6rem, 3.2vw, 2.6rem)` | 1.05 | Card titles, step titles |
-| `--fs-md` | `clamp(1.125rem, 1.6vw, 1.35rem)` | 1.5 | Lead paragraphs |
-| `--fs-base` | `1.0625rem` (17px) | 1.6 | Body |
-| `--fs-sm` | `0.9375rem` | 1.5 | Meta, prices |
-| `--fs-label` | `0.78rem` | 1.2 | Tracked labels |
-
-Body measure ≤ 62ch.
+| Token | Size | Use |
+|---|---|---|
+| `--fs-word` | `clamp(4.2rem, 13vw, 12.5rem)` | "Crepe Craft" wordmark at the brand reveal |
+| `--fs-name` | `clamp(2.7rem, 6.2vw, 6.6rem)` | Menu item name |
+| `--fs-xl` | `clamp(2.5rem, 6vw, 5.6rem)` | Section titles |
+| `--fs-lg` | `clamp(1.45rem, 2.6vw, 2.3rem)` | Prices, group titles |
+| `--fs-md` | `clamp(1.1rem, 1.5vw, 1.3rem)` | Ingredients, lead copy |
+| `--fs-base` | `1.0625rem` | Body |
+| `--fs-sm` | `.9375rem` | Meta |
+| `--fs-label` | `.8rem` | Tracked labels |
 
 ## 3. Spacing & layout
 
-- 8px scale: `--s1 .5rem` `--s2 1rem` `--s3 1.5rem` `--s4 2rem` `--s5 3rem`
-  `--s6 4.5rem` `--s7 7rem` `--s8 10rem`.
-- Section padding: `--s7` desktop, `--s6` phone. Content width 1320px, 16px
-  gutter on phones, 40px on desktop.
-- Layouts are **asymmetric**: headline left, detail right; never three equal
-  centered cards in a row. Menu uses a horizontal rail of cards.
+- 8px scale `--s1`…`--s7` (.5rem to 7rem). Content width 1320px; gutter 16px
+  on phones, 40px from 760px.
+- Stages are sticky 100vh panels inside tall scroll sections (intro 640vh, menu
+  `26 × 34vh + 100vh`).
+- Desktop menu: object right of centre, name/ingredients/price bottom-left,
+  Order this + Call bottom-right, category tabs with progress lines along the
+  bottom, arrows mid-left and mid-right.
+- Phones: object in the top half, text in the bottom half, Order this under
+  the price, tabs above the fixed Call / Order bar.
 
 ## 4. Shape & depth
 
-- Radius: `--r-sm 10px` (chips, inputs), `--r-md 18px` (cards), `--r-pill 999px`
-  (buttons). The crepe is round; cards echo it with soft corners.
-- Depth from light, not shadows: one warm glow (`radial-gradient` of
-  `--batter` at 12% opacity) behind the hero object; one card shadow
-  `0 30px 60px -30px rgba(0,0,0,.7)`.
-- Film grain overlay at 5% opacity, fixed, pointer-events none.
+- Radius: `--r-sm 10px` inputs, `--r-md 18px` panels, `--r-pill` buttons.
+- Depth comes from the 3D light: a warm key spotlight, a studio environment
+  map, a glowing backdrop that follows the camera, and a glossy pedestal with a
+  rim-light ring. Post: side blur and dimming for neighbours, light bloom on
+  desktop, vignette and fine grain.
 
 ## 5. Components
 
-- **Primary button** (Order online): pill, `--batter` bg, `--on-batter` text,
-  600 weight, min-height 52px, arrow icon. Hover `--batter-deep` + 2px lift.
-  Focus: 3px `--cream-50` outline, 3px offset.
-- **Secondary button** (Call): pill, 1.5px `--cream-50`@40% border, cream text,
-  phone icon. Hover fills `--cocoa-800`.
-- **Quiet link:** cream text, `--batter` underline 1px, offset 4px.
-- **Top bar:** fixed, logo wordmark left, chapter nav center (desktop), phone +
-  Order button right. Always visible. Becomes `--cocoa-950`@85% with blur after
-  scroll. On phones a fixed bottom action bar holds Call + Order.
-- **Chapter sidebar:** fixed right rail (desktop, 1100px+): big active number
-  "03 /07" with the chapter name, then a numbered list (01–07) whose names
-  reveal on hover/active, a track that fills in `--batter`, and done/active
-  dots. Click jumps to the chapter. On phones a 2px `--batter` bar across the
-  top replaces it.
-- **Sweet menu stage (03):** one centered 3D crepe; the name (huge display
-  type), "02 / 05" index and an owner-photo thumb sit left; pill dots for the
-  five crepes below. Scrolling swaps the toppings with a full spin. Without
-  WebGL it becomes a plain list of still renders.
-- **Booking form (07):** `--cocoa-900` panel, 16px+ inputs with visible labels,
-  inline errors under each field, one primary "Send request" button and a
-  success panel. Not connected yet (see CLAUDE.md).
-- **Info list:** label/value rows divided by `--cocoa-700` hairlines.
+- **Order online** (primary): gold pill, always in the top bar, on the brand
+  reveal, as "Order this" on every menu item, in Visit, the footer and the
+  phone action bar. Opens Seamless in a new tab.
+- **Call** (secondary): outlined pill, `tel:+19733907777`, in the top bar
+  (icon on phones), next to Order this on desktop, and in the phone action bar.
+- **Top bar:** brand left, Menu / Parties / Visit (desktop), phone and Order right.
+- **Intro:** kicker "Crepes & Waffles · Springfield, NJ", Scroll cue, five
+  captions that fade on their beats, exploded-view labels with leader dots,
+  Skip intro, a thin progress bar.
+- **Menu stage:** category label + "02 / 07" count, name, ingredients, price,
+  category note, arrows, tabs. The full menu also exists as a real HTML list
+  (visually hidden in 3D mode, shown in the no-WebGL page).
+- **Party inquiry form:** name, phone, date, guests. Blur-first validation,
+  errors under each field, "Email my request" opens a ready email to the cafe,
+  then a success panel with the email address and phone as fallbacks.
+- **Visit:** address, hours, phone, rating, amenities, Order + Get directions,
+  map embed.
 
 ## 6. Imagery & icons
 
-- No stock or copyrighted food photos. Every food visual is a **photoreal
-  pre-render** (Blender Cycles path tracing, real-world scale, Poly Haven CC0
-  HDRI and PBR textures plus a scanned banana bunch). Sources live outside the
-  site; outputs are in `assets/media/`.
-- Real photos go in **clearly labeled placeholders**: dashed frame with
-  "Owner photo: Strawberrific" so they can be swapped 1:1. Renders are labeled
-  as preview renders on the page.
-- Icons: inline SVG, 1.75px stroke, round caps (Lucide-style, drawn inline).
-  No emoji as icons.
+- **Items are live 3D, never photos, videos or GIFs.** All food is procedural:
+  lacy golden batter, cooked edges, powdered sugar, Nutella and syrup drizzles,
+  sliced strawberries, bananas, berries, savory fillings, waffles with real
+  square pockets, clear cups with layered drinks and the cafe's logo sticker.
+- Look rules: photoreal materials (clearcoat, subsurface-ish tints, normal
+  maps), natural irregularity, no cartoon colours.
+- Toppings follow each item's board ingredients; powdered sugar only where the
+  board lists it.
+- Still fallbacks are renders of the same scene (`assets/media/stills/`).
+- Icons: inline SVG, 1.75px stroke, round caps. No emoji.
 
 ## 7. Motion
 
-- Libraries: GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.13 (self-hosted in
-  `assets/vendor`). No WebGL.
-- 00 Intro film (4.4s, once per visit, skippable by button, Esc, scroll or
-  swipe): the crepe drops onto the plate, chocolate is poured, powdered sugar
-  sifts down, banana slices land, the camera cranes up. Captions 01–04 follow
-  the film. Then the gold "Crepe Craft" wordmark wipes in over the dimmed last
-  frame, and the film itself flies into the hero's media box, where the hero
-  image (the same last frame) takes over without a cut.
-- 02 Craft: 48 rendered frames scrubbed 1:1 with scroll (spread, fold, fold,
-  drizzle, fruit, sugar). 03 Sweet: one render per crepe, crossfaded.
-  05 Drinks: 36-frame smoothie turntable scrubbed with scroll, floating with
-  a slow bob over a Ciao-style brown spotlight gradient. 04 line reveal,
-  06 marquee. Everything else is static.
-- Ease: `expo.out` / `power3.out` for reveals; scrubbed frames tie 1:1 to scroll.
-- `prefers-reduced-motion`, Save-Data, 2G/3G or low-memory devices: no intro,
-  no Lenis, no pins, still images only, gentle opacity fades.
-
-## 8. Render look (one style for every visual)
-
-- "Dark food studio": stoneware plate on dark walnut, warm key from front-left,
-  orange rim from behind, shallow depth of field (85mm look), Khronos PBR
-  Neutral view transform so food colors stay true.
-- Food reads real: lacy golden crepe with steam-bubble browning, glossy
-  chocolate (`#3A190A`, coat), translucent banana with a seed star, strawberry
-  slices with pale core, dusty blueberries, toasted marshmallows, crumbly
-  cookie and biscoff pieces, piped cream, amber caramel, powdered sugar as
-  ~45k real particles plus a fine dust layer.
-- Media box: square renders feathered into the stage with one shared radial
-  mask, so the film, hero, craft frames and sweet renders all sit in the same
-  spot (right half on desktop, between headline and copy on phones).
-- Smoothie: rendered on transparent film so the CSS gradient is the backdrop
-  (spotlight `#5E3B28` fading to `#0D0704`), condensation droplets on the glass.
-- Formats: WebM (VP9) + MP4 (H.264) with a poster for the film; WebP for
-  frames and stills (720 and 1200 px); a JPEG for social previews.
+- three.js 0.187.0 bundled into `assets/scene.js`; no GSAP or Lenis.
+- Scroll progress is damped (`progress += (target - progress) * (1 - exp(-dt*6))`).
+- Intro beats (progress 0–1): hero 0–.1, spin-in .1–.2, pour and spread
+  .23–.33, cook .3–.37, folds .37–.47, drizzle/toppings/sugar .47–.585,
+  close-up .56–.62, exploded view .67–.8, brand sweep and logo wipe .8–.94,
+  then the address and buttons.
+- Menu: scroll index picks the item; a newcomer spins in a full turn with
+  `outBack` easing and a small hop (1.05s); drag spins with inertia; mouse
+  tilts the camera slightly; neighbours idle-spin slowly.
+- Reduced motion: same scroll story, no float, idle spin, steam or particles;
+  text swaps fade only.
+- Performance: one canvas per stage, paused off-screen and when the tab is
+  hidden; DPR cap 2 (1.75 phones); MSAA 4 (2 phones); bloom on desktop only;
+  menu items built lazily, then warmed during idle time.
