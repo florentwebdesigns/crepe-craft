@@ -232,11 +232,55 @@ export function creamSwirl({ R0 = .3, H = .34, turns = 2.4, s0 = .11, ridges = 8
 export function rosette(r = .12, seed = 2) { return creamSwirl({ R0: r * .55, H: r * 1.1, turns: 1.6, s0: r * .55, ridges: 8, seg: 120, rad: 16 }); }
 
 /* ================= Drizzle that follows a surface ================= */
-const ray = new THREE.Raycaster(), down = new THREE.Vector3(0, -1, 0);
+// Height of the top surface under (x, z). Instead of raycasting every sample (slow: it walks every triangle),
+// the targets are rasterised once into a max-height grid and sampled bilinearly. Same answer as a ray from above.
+const HF = new WeakMap();
+function heightField(targets) {
+  const first = targets[0];
+  let sig = targets.length + ':';
+  for (const t of targets) { t.updateWorldMatrix(true, false); const e = t.matrixWorld.elements; sig += t.uuid + (t.geometry ? t.geometry.attributes.position.version : 0) + ',' + (e[0] + e[5] * 3 + e[10] * 5 + e[12] * 7 + e[13] * 11 + e[14] * 13).toFixed(5) + ';'; }
+  const hit = HF.get(first);
+  if (hit && hit.sig === sig) return hit;
+  const tris = [], v = new THREE.Vector3();
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+  const meshes = []; for (const t of targets) t.traverse(o => { if (o.isMesh && o.geometry) meshes.push(o); });
+  for (const m of meshes) {
+    m.updateWorldMatrix(true, false);
+    const pa = m.geometry.attributes.position, idx = m.geometry.index, n = pa.count, w = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { v.fromBufferAttribute(pa, i).applyMatrix4(m.matrixWorld); w[i * 3] = v.x; w[i * 3 + 1] = v.y; w[i * 3 + 2] = v.z; if (v.x < x0) x0 = v.x; if (v.x > x1) x1 = v.x; if (v.z < z0) z0 = v.z; if (v.z > z1) z1 = v.z; }
+    tris.push({ w, idx: idx ? idx.array : null, count: idx ? idx.count : n });
+  }
+  const N = 224, pad = .02; x0 -= pad; z0 -= pad; x1 += pad; z1 += pad;
+  const sx = (N - 1) / (x1 - x0), sz = (N - 1) / (z1 - z0), grid = new Float32Array(N * N).fill(-Infinity);
+  for (const { w, idx, count } of tris) {
+    for (let k = 0; k < count; k += 3) {
+      const a = (idx ? idx[k] : k) * 3, b = (idx ? idx[k + 1] : k + 1) * 3, c = (idx ? idx[k + 2] : k + 2) * 3;
+      const ax = (w[a] - x0) * sx, az = (w[a + 2] - z0) * sz, bx = (w[b] - x0) * sx, bz = (w[b + 2] - z0) * sz, cx = (w[c] - x0) * sx, cz = (w[c + 2] - z0) * sz;
+      const det = (bz - cz) * (ax - cx) + (cx - bx) * (az - cz); if (Math.abs(det) < 1e-9) continue;
+      const i0 = Math.max(0, Math.ceil(Math.min(ax, bx, cx))), i1 = Math.min(N - 1, Math.floor(Math.max(ax, bx, cx)));
+      const j0 = Math.max(0, Math.ceil(Math.min(az, bz, cz))), j1 = Math.min(N - 1, Math.floor(Math.max(az, bz, cz)));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+        const l1 = ((bz - cz) * (i - cx) + (cx - bx) * (j - cz)) / det, l2 = ((cz - az) * (i - cx) + (ax - cx) * (j - cz)) / det, l3 = 1 - l1 - l2;
+        if (l1 < -1e-4 || l2 < -1e-4 || l3 < -1e-4) continue;
+        const y = l1 * w[a + 1] + l2 * w[b + 1] + l3 * w[c + 1], g = j * N + i;
+        if (y > grid[g]) grid[g] = y;
+      }
+    }
+  }
+  const out = { sig, grid, N, x0, z0, sx, sz };
+  HF.set(first, out);
+  return out;
+}
 export function surfaceY(targets, x, z, fallback = 0) {
-  ray.set(new THREE.Vector3(x, 10, z), down);
-  const hit = ray.intersectObjects(targets, true)[0];
-  return hit ? hit.point.y : fallback;
+  const { grid, N, x0, z0, sx, sz } = heightField(targets);
+  const fx = (x - x0) * sx, fz = (z - z0) * sz;
+  if (fx < 0 || fz < 0 || fx > N - 1 || fz > N - 1) return fallback;
+  const i = Math.min(N - 2, Math.floor(fx)), j = Math.min(N - 2, Math.floor(fz)), tx = fx - i, tz = fz - j;
+  let acc = 0, wsum = 0, best = -Infinity;
+  const corners = [[i, j, (1 - tx) * (1 - tz)], [i + 1, j, tx * (1 - tz)], [i, j + 1, (1 - tx) * tz], [i + 1, j + 1, tx * tz]];
+  for (const [ci, cj, wt] of corners) { const y = grid[cj * N + ci]; if (y > -Infinity) { acc += y * wt; wsum += wt; if (y > best) best = y; } }
+  if (wsum < .25) return best > -Infinity && wsum > 0 ? acc / wsum : fallback;
+  return acc / wsum;
 }
 // path: array of [x,z] in the parent's space; targets: meshes to sit on (world space == parent space here)
 export function drizzle(targets, path, { radius = .012, lift = .42, floorY = 0, samples = 8, wobble = .25, seed = 5 } = {}) {

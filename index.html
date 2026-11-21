@@ -6,7 +6,7 @@
   <!-- DEMO PREVIEW: remove noindex before launch -->
   <meta name="robots" content="noindex, nofollow">
   <title>Crepe Craft Cafe | Crepes &amp; Waffles in Springfield, NJ</title>
-  <meta name="description" content="Sweet and savory crepes, waffles, shakes, smoothies and coffee at 245 Morris Ave, Springfield, NJ. Order online or call (973) 390-7777.">
+  <meta name="description" content="Sweet and savory crepes, waffles, shakes, smoothies and coffee at 245 Morris Ave, Springfield, NJ. Order now, book a table or call (973) 390-7777.">
   <meta name="theme-color" content="#140B07">
   <link rel="canonical" href="https://crepecraft.org/">
   <meta property="og:type" content="restaurant">
@@ -22,7 +22,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,600;0,800;1,800&family=Instrument+Sans:wght@400;500;600&display=swap">
-  <link rel="preload" as="image" href="assets/media/stills/hero.webp" type="image/webp">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23EBB054'/%3E%3Cpath d='M32 4 A28 28 0 0 1 60 32 L32 32Z' fill='%23C98A2E'/%3E%3C/svg%3E">
 
@@ -91,6 +90,7 @@
 </head>
 <body>
   <a class="skip" href="#menu">Skip to the menu</a>
+  <a class="skip" href="#book">Skip to booking</a>
 
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Crepe Craft Cafe, back to top">
@@ -99,7 +99,7 @@
     </a>
     <nav class="topnav" aria-label="Sections">
       <a href="#menu">Menu</a>
-      <a href="#parties">Parties</a>
+      <a href="#book">Book</a>
       <a href="#visit">Visit</a>
     </nav>
     <div class="topbar__actions">
@@ -107,45 +107,33 @@
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 7 7L16 14l5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
         <span>(973) 390-7777</span>
       </a>
-      <a class="btn btn--primary btn--sm" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order online<span class="sr"> (opens in a new tab)</span></a>
+      <a class="btn btn--ghost btn--sm topbar__book" href="#book">Book a table</a>
+      <a class="btn btn--primary btn--sm" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
     </div>
   </header>
 
   <main id="main">
-    <!-- 01 Intro: one sticky stage scrubbed by scroll. The canvas is decoration (aria-hidden); every word is real HTML. -->
-    <section class="intro" id="top" data-intro aria-labelledby="brand-title">
-      <div class="intro__stage">
-        <img class="intro__still" src="assets/media/stills/hero.webp" alt="" width="1600" height="1000" aria-hidden="true" fetchpriority="high">
-        <canvas class="intro__gl" data-intro-gl aria-hidden="true"></canvas>
-        <div class="intro__hero" data-beat="hero">
-          <p class="intro__kicker">Crepes &amp; Waffles · Springfield, NJ</p>
-          <p class="intro__cue" aria-hidden="true"><span>Scroll</span><i></i></p>
-        </div>
-        <ol class="intro__caps" aria-hidden="true">
-          <li data-from=".232" data-to=".33">Batter meets a hot griddle</li>
-          <li data-from=".31" data-to=".385">The edges turn golden and lacy</li>
-          <li data-from=".385" data-to=".475">Folded in half, then in half again</li>
-          <li data-from=".475" data-to=".59">Nutella, strawberries, a snow of sugar</li>
-          <li data-from=".6" data-to=".675">Thin, lacy, golden</li>
-        </ol>
-        <ul class="intro__labels" aria-hidden="true">
-          <li data-label="sugar">Powdered sugar</li>
-          <li data-label="drizzle">Nutella drizzle</li>
-          <li data-label="fruit">Strawberries</li>
-          <li data-label="crepe">Crepe</li>
-        </ul>
-        <div class="intro__brand" data-brand>
-          <h1 class="wordmark" id="brand-title"><span class="wordmark__text">Crepe Craft</span><span class="wordmark__tag">Cafe</span></h1>
-          <p class="intro__sub" data-brand-rest>Crepes &amp; Waffles</p>
-          <p class="intro__addr" data-brand-rest>245 Morris Ave, Springfield, NJ 07081</p>
-          <div class="intro__cta" data-brand-rest>
-            <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order online<span class="sr"> (opens in a new tab)</span></a>
-            <a class="btn btn--ghost" href="#menu">See the menu</a>
-          </div>
-        </div>
-        <a class="intro__skip" href="#menu" data-skip>Skip intro</a>
-        <div class="intro__bar" aria-hidden="true"><i data-intro-bar></i></div>
+    <!-- 01 Hero: a 4.6 second automatic 3D shot (no scrolling). The canvas is decoration (aria-hidden); every word is real HTML.
+         Without WebGL the still (a render of the final frame) shows instead. -->
+    <section class="hero" id="top" data-hero aria-labelledby="hero-title">
+      <picture class="hero__still">
+        <source media="(max-width: 759px)" srcset="assets/media/stills/hero-p.webp" width="780" height="1300">
+        <img src="assets/media/stills/hero.webp" alt="" width="1600" height="1000" loading="lazy" decoding="async">
+      </picture>
+      <canvas class="hero__gl" data-hero-gl aria-hidden="true"></canvas>
+      <div class="hero__copy">
+        <h1 class="sr" id="hero-title">Crepe Craft Cafe, crepes and waffles in Springfield, NJ</h1>
+        <p class="hero__lede">Sweet and savory crepes, waffles, shakes and coffee.</p>
+        <!-- CONFIRM WITH OWNER: hours (12:30–10:30 PM vs 12:00–10:00 PM) -->
+        <p class="hero__meta"><span>245 Morris Ave, Springfield, NJ</span><span>Open daily, 12:30–10:30 PM</span></p>
       </div>
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
+        <a class="btn btn--ghost btn--lg" href="#book">Book a table</a>
+      </div>
+      <button class="hero__replay" type="button" data-replay>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg>
+        Replay intro</button>
     </section>
 
     <!-- 02 Menu: sticky 3D carousel. Scroll, swipe, the arrow keys or the arrow buttons change the item.
@@ -162,7 +150,7 @@
             <p class="menu__price" data-m-price>$9.25</p>
           </div>
           <div class="menu__actions">
-            <a class="btn btn--primary" data-m-order href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order this<span class="sr"> online (opens in a new tab)</span></a>
+            <a class="btn btn--primary" data-m-order href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order this<span class="sr"> now on Seamless (opens in a new tab)</span></a>
             <a class="btn btn--ghost menu__call" href="tel:+19733907777">Call to order</a>
           </div>
           <p class="menu__note" data-m-note aria-hidden="true">Build your own, up to 4 toppings: $14.99</p>
@@ -247,47 +235,140 @@
       </div>
     </section>
 
-    <!-- 03 Party / group inquiry: opens a ready-to-send email to the cafe (no backend). -->
-    <section class="party" id="parties" aria-labelledby="party-title">
-      <div class="wrap party__grid">
-        <div class="party__head">
-          <h2 class="h-xl" id="party-title">Feeding a group?</h2>
-          <p class="lead">Planning a party or a big order? Send the details straight to the cafe's inbox, or call <a class="tap" href="tel:+19733907777">(973) 390-7777</a>.</p>
+    <!-- 03 Booking: a big request form. It opens a ready-to-send email to the cafe (no backend, nothing is booked by the site).
+         CONFIRM WITH OWNER: that the cafe takes table bookings, parties and group orders, and that crepe.craft@yahoo.com is checked. -->
+    <section class="book" id="book" aria-labelledby="book-title">
+      <div class="wrap">
+        <div class="book__head">
+          <h2 class="h-xl" id="book-title">Book a table, a party or a big order.</h2>
+          <p class="lead">Tell the cafe what you are planning. Your request lands in their inbox, and nothing is booked until they confirm.</p>
         </div>
-        <!-- CONFIRM WITH OWNER: that the cafe takes party / group orders, and that crepe.craft@yahoo.com is checked. -->
-        <form class="party__form" id="party-form" novalidate aria-labelledby="party-title">
-          <div class="party__fields" data-party-fields>
-            <div class="field">
-              <label for="p-name">Name</label>
-              <input id="p-name" name="name" type="text" autocomplete="name" required aria-describedby="p-name-err">
-              <p class="field__err" id="p-name-err"></p>
+        <div class="book__grid">
+          <form class="book__form" id="book-form" novalidate aria-labelledby="book-title">
+            <div class="book__fields" data-book-fields>
+              <fieldset class="book__types">
+                <legend>What are you booking?</legend>
+                <label class="type">
+                  <input type="radio" name="type" value="table" checked>
+                  <span class="type__box">
+                    <svg class="ico type__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16M6 10v9M18 10v9M8 6h8l2 4H6Z"/></svg>
+                    <span class="type__t">A table</span>
+                    <span class="type__d">Dine in with friends or family</span>
+                  </span>
+                </label>
+                <label class="type">
+                  <input type="radio" name="type" value="party">
+                  <span class="type__box">
+                    <svg class="ico type__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21h14M6 21v-7h12v7M6 14c1.5 1 3 1 4 0s2.5-1 4 0 3 1 4 0M12 10V7M12 4.5v.01"/></svg>
+                    <span class="type__t">A party</span>
+                    <span class="type__d">Birthdays and celebrations</span>
+                  </span>
+                </label>
+                <label class="type">
+                  <input type="radio" name="type" value="group">
+                  <span class="type__box">
+                    <svg class="ico type__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+                    <span class="type__t">A group order</span>
+                    <span class="type__d">A big order to pick up</span>
+                  </span>
+                </label>
+              </fieldset>
+
+              <div class="book__row">
+                <div class="field">
+                  <label for="b-date">Date</label>
+                  <input id="b-date" name="date" type="date" required aria-describedby="b-date-err">
+                  <p class="field__err" id="b-date-err" role="alert"></p>
+                </div>
+                <div class="field">
+                  <label for="b-time" data-time-label>Time</label>
+                  <!-- CONFIRM WITH OWNER: slots follow the posted hours (12:30–10:30 PM), last slot 10:00 PM -->
+                  <select id="b-time" name="time" required aria-describedby="b-time-err">
+                    <option value="">Pick a time</option>
+                    <option>12:30 PM</option>
+                    <option>1:00 PM</option>
+                    <option>1:30 PM</option>
+                    <option>2:00 PM</option>
+                    <option>2:30 PM</option>
+                    <option>3:00 PM</option>
+                    <option>3:30 PM</option>
+                    <option>4:00 PM</option>
+                    <option>4:30 PM</option>
+                    <option>5:00 PM</option>
+                    <option>5:30 PM</option>
+                    <option>6:00 PM</option>
+                    <option>6:30 PM</option>
+                    <option>7:00 PM</option>
+                    <option>7:30 PM</option>
+                    <option>8:00 PM</option>
+                    <option>8:30 PM</option>
+                    <option>9:00 PM</option>
+                    <option>9:30 PM</option>
+                    <option>10:00 PM</option>
+                  </select>
+                  <p class="field__err" id="b-time-err" role="alert"></p>
+                </div>
+                <div class="field">
+                  <label for="b-guests">How many people</label>
+                  <div class="stepper">
+                    <button type="button" data-step="-1" aria-label="One person fewer"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button>
+                    <input id="b-guests" name="guests" type="number" inputmode="numeric" min="1" max="500" value="2" required aria-describedby="b-guests-err">
+                    <button type="button" data-step="1" aria-label="One person more"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button>
+                  </div>
+                  <p class="field__err" id="b-guests-err" role="alert"></p>
+                </div>
+              </div>
+
+              <div class="book__row">
+                <div class="field">
+                  <label for="b-name">Name</label>
+                  <input id="b-name" name="name" type="text" autocomplete="name" required aria-describedby="b-name-err">
+                  <p class="field__err" id="b-name-err" role="alert"></p>
+                </div>
+                <div class="field">
+                  <label for="b-phone">Phone</label>
+                  <input id="b-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="b-phone-err">
+                  <p class="field__err" id="b-phone-err" role="alert"></p>
+                </div>
+                <div class="field">
+                  <label for="b-email">Email <span class="field__opt">(optional)</span></label>
+                  <input id="b-email" name="email" type="email" autocomplete="email" aria-describedby="b-email-err">
+                  <p class="field__err" id="b-email-err" role="alert"></p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="b-notes">Anything else? <span class="field__opt">(optional)</span></label>
+                <textarea id="b-notes" name="notes" rows="3" placeholder="Allergies, the occasion, what you would like to order"></textarea>
+              </div>
+
+              <div class="book__submit">
+                <button class="btn btn--primary btn--lg" type="submit">Email my booking request</button>
+                <p class="book__fine">Opens your email app with everything filled in, addressed to crepe.craft@yahoo.com. For today, calling is fastest: <a class="tap" href="tel:+19733907777">(973) 390-7777</a>.</p>
+              </div>
             </div>
-            <div class="field">
-              <label for="p-phone">Phone</label>
-              <input id="p-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="p-phone-err">
-              <p class="field__err" id="p-phone-err"></p>
+            <div class="book__done" data-book-done tabindex="-1" hidden>
+              <p class="book__done-title">Your email is ready, <span data-book-name></span>.</p>
+              <p data-book-summary></p>
+              <p>Hit send in your email app and it goes to the cafe. Nothing opened? Email <a href="mailto:crepe.craft@yahoo.com">crepe.craft@yahoo.com</a> or call <a class="tap" href="tel:+19733907777">(973) 390-7777</a>.</p>
+              <div class="book__done-cta">
+                <button class="btn btn--ghost" type="button" data-book-again>Start a new request</button>
+                <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
+              </div>
             </div>
-            <div class="field">
-              <label for="p-date">Date</label>
-              <input id="p-date" name="date" type="date" required aria-describedby="p-date-err">
-              <p class="field__err" id="p-date-err"></p>
-            </div>
-            <div class="field">
-              <label for="p-guests">How many people</label>
-              <input id="p-guests" name="guests" type="number" inputmode="numeric" min="2" max="500" required aria-describedby="p-guests-err">
-              <p class="field__err" id="p-guests-err"></p>
-            </div>
-            <div class="party__submit">
-              <button class="btn btn--primary" type="submit">Email my request</button>
-              <p class="party__fine">Opens your email app with everything filled in, addressed to crepe.craft@yahoo.com.</p>
-            </div>
-          </div>
-          <div class="party__done" data-party-done tabindex="-1" hidden>
-            <p class="party__done-title">Your email is ready, <span data-party-name></span>.</p>
-            <p>Hit send in your email app and it goes to the cafe. Nothing opened? Email <a href="mailto:crepe.craft@yahoo.com">crepe.craft@yahoo.com</a> or call <a class="tap" href="tel:+19733907777">(973) 390-7777</a>.</p>
-            <button class="btn btn--ghost" type="button" data-party-again>Start over</button>
-          </div>
-        </form>
+          </form>
+
+          <aside class="book__aside" aria-labelledby="hungry-title">
+            <h3 class="book__aside-title" id="hungry-title">Hungry right now?</h3>
+            <p>Order on Seamless for pickup or delivery.</p>
+            <a class="btn btn--primary btn--lg book__order" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
+            <dl class="book__facts">
+              <div><dt>Call the cafe</dt><dd><a class="tap" href="tel:+19733907777">(973) 390-7777</a></dd></div>
+              <div><dt>Open</dt><dd>Every day, 12:30–10:30 PM</dd></div>
+              <div><dt>Find us</dt><dd>245 Morris Ave, Springfield, NJ 07081</dd></div>
+            </dl>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -308,7 +389,8 @@
           </address>
           <p class="visit__more">Dine in, takeout, curbside pickup or delivery. Wheelchair-accessible parking and restrooms, and dog-friendly seating.</p>
           <div class="visit__cta">
-            <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order online<span class="sr"> (opens in a new tab)</span></a>
+            <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
+            <a class="btn btn--ghost" href="#book">Book a table</a>
             <a class="btn btn--ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=245+Morris+Ave+Springfield+NJ+07081" target="_blank" rel="noopener">Get directions<span class="sr"> (opens in a new tab)</span></a>
           </div>
         </div>
@@ -324,16 +406,17 @@
     <div class="wrap footer__grid">
       <p class="footer__brand">Crepe Craft Cafe</p>
       <p>245 Morris Ave, Springfield, NJ 07081<br><a class="tap" href="tel:+19733907777">(973) 390-7777</a> · <a href="mailto:crepe.craft@yahoo.com">crepe.craft@yahoo.com</a></p>
-      <p>Open daily, 12:30 PM–10:30 PM<br><a href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order online<span class="sr"> (opens in a new tab)</span></a></p>
+      <p>Open daily, 12:30 PM–10:30 PM<br><a href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now on Seamless<span class="sr"> (opens in a new tab)</span></a> · <a href="#book">Book a table</a></p>
       <p class="footer__credit">Preview by FD Web Designs</p>
     </div>
   </footer>
 
-  <nav class="actionbar" aria-label="Call or order">
-    <a class="btn btn--ghost" href="tel:+19733907777">
+  <nav class="actionbar" aria-label="Call, book or order">
+    <a class="btn btn--ghost" href="tel:+19733907777" aria-label="Call the cafe">
       <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 7 7L16 14l5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
       Call</a>
-    <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order online<span class="sr"> (opens in a new tab)</span></a>
+    <a class="btn btn--ghost" href="#book">Book</a>
+    <a class="btn btn--primary" href="https://www.seamless.com/menu/crepe-craft-245-morris-ave-springfield/9233840" target="_blank" rel="noopener">Order now<span class="sr"> on Seamless (opens in a new tab)</span></a>
   </nav>
 
   <script src="assets/app.js" defer></script>

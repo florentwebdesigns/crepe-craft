@@ -8,7 +8,8 @@ import { ease, lerp, clamp01, damp } from './anim.js';
 
 export function createMenu(canvas, ui, opt = {}) {
   const phone = !!opt.phone, reduce = !!opt.reduce;
-  const S = createStage(canvas, { phone });
+  const S = createStage(canvas, { phone, palette: 'chocolate', fixedPR: opt.fixedPR });
+  const PAL = { sweet: 'chocolate', savory: 'butter', waffles: 'maple', drinks: 'berry' };
   const { scene, camera } = S;
   const N = ITEMS.length;
   const holders = ITEMS.map(() => { const h = new THREE.Group(); h.visible = false; scene.add(h); return h; });
@@ -54,7 +55,7 @@ export function createMenu(canvas, ui, opt = {}) {
       if (prevTi >= 0 && !reduce && !opt.instant) { enterT = t; enterFrom = Math.sign(ti - prevTi); }
       prevTi = ti; yaw = 0; vel = 0;
       const it = ITEMS[ti], cat = CATS.find(c => c.id === it.cat);
-      if (cat.id !== catId) { const first = catId === null; catId = cat.id; S.setMood(cat.mood[0], cat.mood[1], first); }
+      if (cat.id !== catId) { const first = catId === null; catId = cat.id; S.setMood(cat.mood[0], cat.mood[1], first); S.setPalette(PAL[cat.id] || 'chocolate', first); }
       if (ui.onItem) ui.onItem(ti, it, cat);
     }
     cur = opt.instant ? ti : reduce ? damp(cur, ti, 14, dt) : damp(cur, ti, 6.5, dt);

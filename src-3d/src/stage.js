@@ -8,6 +8,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { U } from './mats.js';
+import { createBackdrop } from './backdrop.js';
 
 const BLUR = (dir) => ({
   uniforms: { tDiffuse: { value: null }, uRes: { value: new THREE.Vector2(1, 1) }, uAmt: { value: 0 }, uSharp: { value: .22 }, uDir: { value: dir }, uDim: { value: 0 } },
@@ -37,7 +38,7 @@ const FINISH = {
 };
 
 // a dark product-photo studio for reflections: black room, warm softboxes (key, two strips, low back light)
-function studioEnv(pmrem) {
+export function studioEnv(pmrem) {
   const s = new THREE.Scene();
   s.add(new THREE.Mesh(new THREE.BoxGeometry(24, 14, 24), new THREE.MeshBasicMaterial({ color: '#070403', side: THREE.BackSide })));
   const box = (w, h, color, k, x, y, z) => {
@@ -55,7 +56,10 @@ function studioEnv(pmrem) {
 export function createStage(canvas, opt = {}) {
   const phone = !!opt.phone;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: !!opt.still });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, phone ? 1.75 : 2));
+  // resolution starts at 1.5x (sharp on retina, 44% fewer pixels than 2x) and adapts to the device: see quality()
+  const dpr = window.devicePixelRatio || 1;
+  const Q = { pr: opt.fixedPR || Math.min(dpr, 1.5), min: Math.min(dpr, .85), max: Math.min(dpr, phone ? 1.75 : 2), fixed: !!opt.fixedPR, acc: 0, n: 0, t: 0, good: 0, bloomOff: false };
+  renderer.setPixelRatio(Q.pr);
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setClearColor('#0c0705');
@@ -81,12 +85,15 @@ export function createStage(canvas, opt = {}) {
         gl_FragColor = vec4(c, 1.);
       }`
   }));
-  bg.renderOrder = -10; scene.add(bg);
+  bg.renderOrder = -10;
+  // the moving flavour backdrop replaces the plain glow sphere
+  const backdrop = createBackdrop(renderer, { palette: opt.palette || 'caramel', zoom: opt.zoom, bokeh: .05, style: opt.bgStyle ?? 1 });
+  scene.background = backdrop.texture; scene.backgroundIntensity = 1;
 
   // lights
   const key = new THREE.SpotLight('#ffeedd', 95, 0, .42, .9, 2);
   key.position.set(3.2, 6.2, 4.2); key.castShadow = true;
-  key.shadow.mapSize.set(phone ? 1024 : 2048, phone ? 1024 : 2048); key.shadow.bias = -.0003; key.shadow.normalBias = .02;
+  key.shadow.mapSize.set(phone ? 768 : 1024, phone ? 768 : 1024); key.shadow.bias = -.0003; key.shadow.normalBias = .02;
   key.shadow.camera.near = 2; key.shadow.camera.far = 16; key.shadow.radius = 4; key.shadow.blurSamples = 12;
   scene.add(key, key.target);
   const rim = new THREE.SpotLight('#ffcf9a', 70, 0, .5, .8, 2); rim.position.set(-3.5, 3.4, -4.6); scene.add(rim, rim.target);
@@ -130,13 +137,30 @@ export function createStage(canvas, opt = {}) {
     const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
     if (w === W && h === H) return false;
     W = w; H = h;
-    renderer.setSize(w, h, false); composer.setSize(w, h);
+    renderer.setSize(w, h, false); composer.setSize(w, h); backdrop.resize(w, h);
     renderer.getDrawingBufferSize(size);
     blurH.uniforms.uRes.value.copy(size); blurV.uniforms.uRes.value.copy(size); finish.uniforms.uRes.value.copy(size);
     bloom.resolution.set(size.x / 2, size.y / 2);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     return true;
   }
+  // adaptive quality: if frames run slow for a second, drop resolution a step (then bloom); creep back up when there is headroom
+  function quality(dt) {
+    if (Q.fixed) return;
+    Q.acc += dt; Q.n++; Q.t += dt;
+    if (Q.t < 1.1) return;
+    const avg = Q.acc / Q.n; Q.acc = Q.n = Q.t = 0;
+    if (avg > 1 / 46) {
+      Q.good = 0;
+      if (Q.pr > Q.min + .01) { Q.pr = Math.max(Q.min, Q.pr - .2); renderer.setPixelRatio(Q.pr); W = 0; resize(); }
+      else if (!Q.bloomOff) { Q.bloomOff = true; bloom.enabled = false; }
+    } else if (avg < 1 / 57) {
+      if (++Q.good >= 4 && Q.pr < Q.max - .01) { Q.good = 0; Q.pr = Math.min(Q.max, Q.pr + .15); renderer.setPixelRatio(Q.pr); W = 0; resize(); }
+    } else Q.good = 0;
+  }
+  function setPalette(name, instant) { backdrop.setPalette(name, instant); }
+  const gp = new THREE.Vector3();
+  function setGlowAt(world) { gp.copy(world).project(camera); backdrop.uniforms.uGlowPos.value.set(gp.x * .5 + .5, gp.y * .5 + .5); }
   function setBlur(a, sharp = .22) { blurH.uniforms.uAmt.value = blurV.uniforms.uAmt.value = a; blurH.uniforms.uSharp.value = blurV.uniforms.uSharp.value = sharp; blurH.enabled = blurV.enabled = a > .01; }
   setBlur(0);
   function render(dt = 1 / 60, t = 0) {
@@ -149,7 +173,9 @@ export function createStage(canvas, opt = {}) {
     // keep the backdrop glow just behind whatever the camera looks at
     camera.getWorldDirection(fwd); bgU.uGlowPos.value.set(Math.atan2(fwd.x, -fwd.z), fwd.y + .1);
     finish.uniforms.uTime.value = t; U.uTime.value = t;
+    backdrop.update(dt, t);
     composer.render(dt);
+    quality(dt);
   }
-  return { renderer, scene, camera, key, rim, rim2, fill, ped, pedMat, ring, shadow, bgU, composer, bloom, finish, resize, render, setBlur, setMood, size: () => [W, H], phone };
+  return { renderer, scene, camera, key, rim, rim2, fill, ped, pedMat, ring, shadow, bgU, composer, bloom, finish, backdrop, resize, render, setBlur, setMood, setPalette, setGlowAt, size: () => [W, H], phone, Q };
 }

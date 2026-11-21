@@ -1,5 +1,5 @@
 // Page screenshots: node pshot.js <outdir> <w> <h> '<steps json>' [query]
-// step: { name, sec: 'intro'|'menu'|selector, p: 0..1 } or { name, index: n } (menu item) or { name, y: px }
+// step: { name, sec: 'hero'|'menu'|selector, p: 0..1, hero: seconds (sets the hero clock) } or { name, index: n } (menu item) or { name, y: px }
 const { chromium } = require('playwright');
 const path = require('path'), fs = require('fs');
 const V5 = __dirname, SITE = path.join(V5, '..');   // fonts: put a Google Fonts css + woff2 files in ./fontcache
@@ -35,11 +35,13 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/cs
       let y = 0;
       if (s.y != null) y = s.y;
       else if (s.index != null) { const m = document.querySelector('[data-menu]'); const N = +getComputedStyle(m).getPropertyValue('--n'); y = m.offsetTop + (s.index + .02) / (N - 1) * (m.offsetHeight - innerHeight); }
-      else { const sec = s.sec === 'intro' ? document.querySelector('[data-intro]') : s.sec === 'menu' ? document.querySelector('[data-menu]') : document.querySelector(s.sec); y = sec.offsetTop + (s.p || 0) * Math.max(0, sec.offsetHeight - innerHeight); }
+      else { const sec = s.sec === 'hero' ? document.querySelector('[data-hero]') : s.sec === 'menu' ? document.querySelector('[data-menu]') : document.querySelector(s.sec); y = sec.offsetTop + (s.p || 0) * Math.max(0, sec.offsetHeight - innerHeight); }
       window.scrollTo(0, y);
+      if (s.hero != null && window.__cc) window.__cc.hero.clock = s.hero;
     }, s);
-    await p.waitForTimeout(s.wait || 300);
-    await p.evaluate(() => new Promise(r => { let n = 0; const f = () => (++n > 6 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f); }));
+    await p.waitForTimeout(s.hero != null ? 0 : (s.wait || 300));
+    if (s.hero != null) await p.evaluate((v) => new Promise(r => { const f = () => { if (window.__cc.hero.clock >= v + .02) r(); else requestAnimationFrame(f); }; requestAnimationFrame(f); }), s.hero);
+    else await p.evaluate(() => new Promise(r => { let n = 0; const f = () => (++n > 6 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f); }));
     if (s.after) await p.waitForTimeout(s.after);
     await p.screenshot({ path: path.join(outdir, s.name + '.png') });
   }
