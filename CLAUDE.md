@@ -2,7 +2,8 @@
 
 Demo preview built by **FD Web Designs** to show the owner of Crepe Craft Cafe.
 Static site, no build step needed to deploy (the 3D bundle is prebuilt).
-Status: **demo, `noindex` on. Nothing is live. Deploy or push only when florent says so.**
+Status: **demo, `noindex` on. Deploy or push only when florent says so.**
+Hosting: Vercel project `crepe-craft-new` (team fwebdesigns), connected to GitHub florentwebdesigns/crepe-craft; every push to `main` deploys.
 
 ## Business facts (use only these, never invent)
 
